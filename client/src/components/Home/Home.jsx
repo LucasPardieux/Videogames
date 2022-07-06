@@ -8,6 +8,8 @@ import { useState, useEffect } from 'react';
 const Home = () => {
 
     const allGames = useSelector(state => state.videogames.allGames);
+    const search = useSelector(state => state.videogames.search);
+    const gameSearched = useSelector(state => state.videogames.gameSearched);
     const dispatch = useDispatch();
 
     const updateState = () =>{
@@ -21,15 +23,20 @@ const Home = () => {
     
 
   return (
-    <div>
+    <div className={`${style.homeContainer}`}>
         <ul>
             {
-                allGames?.map((g)=> {
+                search===""?allGames?.map((g)=> {
                     return(
-                        <div>
-                            <h2>{g.name}</h2>
+                        <div key={g.id}>
+                            <h2>{g.name}</h2><h3>{g.id}</h3>
                         </div>
                     )
+                }):gameSearched?.map((g)=>{
+                    return(
+                        <div key={g.id}>
+                            <h2>{g.name}</h2><h3>{g.id}</h3>
+                        </div>)
                 })
             }
         </ul>

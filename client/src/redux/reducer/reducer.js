@@ -3,9 +3,11 @@ import axios from "axios";
 
 const initialState = {
     allGames: [],
+    gameSearched: [],
     game:{},
     allGenres: [],
     loading: false,
+    search:"",
 }
 
 export const gameSlice = createSlice({
@@ -23,11 +25,17 @@ export const gameSlice = createSlice({
         },
         setLoading: function(state, action){
             state.loading = action.payload
-        }
+        },
+        setSearch: function(state, action){
+            state.search = action.payload
+        },
+        gameSearched: function(state, action){
+            state.gameSearched = action.payload
+        },
     }
 })
 
-export const {setAllGames, setAllGenres, setGame, setLoading} = gameSlice.actions;
+export const {setAllGames, setAllGenres, setGame, setLoading, setSearch, gameSearched} = gameSlice.actions;
 
 export default gameSlice.reducer;
 
@@ -41,4 +49,14 @@ export const getAllGames = () => async (dispatch) =>{
     } catch (error) {
         alert("Error al requerir los games")
     }
+}
+
+export const getSearch = (input) => (dispatch) =>{
+    dispatch(setSearch(input))
+    return axios.get(`http://localhost:3001/videogames?name=${input}`)
+    .then((response) => response.data)
+    .then((data) =>{
+        dispatch(gameSearched(data))
+    })
+    .catch((err)=>console.log(err))
 }
