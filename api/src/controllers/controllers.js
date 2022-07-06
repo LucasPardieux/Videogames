@@ -10,7 +10,7 @@ module.exports = {
         let arrayConcat = [];
 
         try {
-            const info = await axios.get(`https://api.rawg.io/api/games?key=${API_KEY}`)
+            const info = await axios.get(`https://api.rawg.io/api/games?page=2&page_size=50&key=${API_KEY}`)
             const infoDB = await Videogame.findAll();
             rpta = info.data.results;
             arrayConcat = rpta.concat(infoDB);
@@ -52,6 +52,7 @@ module.exports = {
             let arrayAux = arrayConcat.map((g, i)=>{
                 if(i < 15){
                     let newObj = {
+                        id:g.id,
                         name: g.name,
                         released: g.released,
                         image: g.background_image,
