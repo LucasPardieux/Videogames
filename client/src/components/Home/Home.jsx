@@ -3,6 +3,7 @@ import {useSelector, useDispatch} from "react-redux";
 import { getAllGames } from '../../redux/reducer/reducer';
 import style from "./Home.module.css";
 import { useState, useEffect } from 'react';
+import { Cards } from '../Cards/Cards';
 
 
 const Home = () => {
@@ -20,19 +21,21 @@ const Home = () => {
     useEffect(() => {
       if(allGames.length===0) updateState();
     }, [])
+
+    const nextHandler = () =>{
+        
+    }
+
+    const prevHandler = () =>{
+        
+    }
     
 
   return (
     <div className={`${style.homeContainer}`}>
         <ul>
             {
-                search===""?allGames?.map((g)=> {
-                    return(
-                        <div key={g.id}>
-                            <h2>{g.name}</h2><h3>{g.id}</h3>
-                        </div>
-                    )
-                }):gameSearched?.map((g)=>{
+                search===""?<Cards allGames={allGames} nextHandler={nextHandler} prevHandler={prevHandler}/>:gameSearched?.map((g)=>{
                     return(
                         <div key={g.id}>
                             <h2>{g.name}</h2><h3>{g.id}</h3>

@@ -11,6 +11,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    z-index: 3;
 }
 
 .navLogo img{
@@ -73,7 +74,7 @@
 
 .navSearch button{
     position: relative;
-    bottom: 1px;
+    top: 1.5px;
     background-color: rgba(107, 107, 107, 0.25);
     border: 0px;
     height: 40px;
@@ -83,4 +84,9 @@
     padding: 0px 15px;
     box-shadow: none;
     color: white;
+}
+
+.navSearchIcon{
+    width: 20px;
+    height: 20px;
 }

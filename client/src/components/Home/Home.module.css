@@ -1,4 +1,8 @@
 
+body{
+    background-color: #010615;
+}
+
 .homeContainer{
     position: absolute;
     top: 10%;
