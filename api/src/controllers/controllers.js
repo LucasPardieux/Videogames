@@ -11,7 +11,9 @@ module.exports = {
 
         try {
             const info = await axios.get(`https://api.rawg.io/api/games?page=2&page_size=50&key=${API_KEY}`)
-            const infoDB = await Videogame.findAll();
+            const infoDB = await Videogame.findAll({
+                include: Genre
+            });
             rpta = info.data.results;
             arrayConcat = rpta.concat(infoDB);
             arrayConcat = arrayConcat.map((g)=>{
@@ -40,15 +42,16 @@ module.exports = {
     getGameByName: async function(name){
 
         try {
-            console.log(name)
             const info = await axios.get(`https://api.rawg.io/api/games?search=${name}&key=${API_KEY}`)
             const infoDB = await Videogame.findAll({
                 where:{
                     name:name
-                }
+                },
+                include: Genre
             });
             rpta = info.data.results;
             arrayConcat = rpta.concat(infoDB);
+            
             let arrayAux = arrayConcat.map((g, i)=>{
                 if(i < 15){
                     let newObj = {
