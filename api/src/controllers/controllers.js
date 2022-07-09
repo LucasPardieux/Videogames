@@ -10,30 +10,46 @@ module.exports = {
         let arrayConcat = [];
 
         try {
-            const info = await axios.get(`https://api.rawg.io/api/games?page=2&page_size=50&key=${API_KEY}`)
-            const infoDB = await Videogame.findAll({
-                include: Genre
-            });
-            rpta = info.data.results;
-            arrayConcat = rpta.concat(infoDB);
-            arrayConcat = arrayConcat.map((g)=>{
-                let newObj = {
-                    id: g.id,
-                    name: g.name,
-                    released: g.released,
-                    image: g.background_image,
-                    rating: g.rating,
-                    platforms: g.platforms,
-                    genres: g.genres,
+
+            if(id!==undefined){
+                try {
+                    const info = await axios.get(`https://api.rawg.io/api/games/${id}?key=${API_KEY}`)
+                    return info.data;
+                } catch (error) {
+                    try {
+                        const infoDB = await Videogame.findAll({
+                            where:{id:id},
+                            include: Genre
+                        })
+                        return infoDB;
+                    } catch (error) {
+                        throw new Error(error);
+                    }
+                    
                 }
-                return newObj
-            })
-            if(id !== undefined){
-                let gameById = arrayConcat.filter(g => g.id == id)
-                return gameById
             }else{
-                return arrayConcat;
+                const info = await axios.get(`https://api.rawg.io/api/games?page=2&page_size=50&key=${API_KEY}`)
+                const infoDB = await Videogame.findAll({
+                    include: Genre
+                });
+                console.log(info)
+                rpta = info.data.results;
+                arrayConcat = rpta.concat(infoDB);
+                arrayConcat = arrayConcat.map((g)=>{
+                    let newObj = {
+                        id: g.id,
+                        name: g.name,
+                        released: g.released,
+                        image: g.background_image,
+                        rating: g.rating,
+                        platforms: g.platforms,
+                        genres: g.genres,
+                    }
+                    return newObj
+                })
+                    return arrayConcat;
             }
+
         } catch (error) {
             throw new Error(error);
         }
