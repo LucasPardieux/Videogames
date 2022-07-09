@@ -90,7 +90,7 @@ const Card = (props) => {
                 <div className={`${style.cardInfoReq}`}>
                      <h2>{props.name}</h2>
                      <p>Rating: {props.rating}</p>
-                     <p>Genres: {props.genres?.map((g) => {return g.name + " / "})}</p>
+                     <p>Genres: {props.genres?.map((g) => {return <span key={g.id}>{g.name + " / "}</span>})}</p>
                 </div>
                 <div className={`${style.cardInfoNoReq}`}>
                     <span>{platformIcon(props.platforms)}</span>

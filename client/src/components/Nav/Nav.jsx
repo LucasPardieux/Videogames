@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import style from './Nav.module.css'
 import logo from '../../images/gamerCaveLogo.png'
-import { getSearch } from '../../redux/reducer/reducer';
+import { getSearch, putSearchedGames } from '../../redux/reducer/reducer';
 import { BiSearchAlt } from "react-icons/bi";
 
 
@@ -16,7 +16,11 @@ export class Nav extends Component {
 
     searchHandler(){
         const input = document.getElementById("inputSearch").value;
-        this.props.getSearch(input)
+        if(input === ""){
+            this.props.putSearchedGames();
+        }else{
+            this.props.getSearch(input)
+        }
     }
 
 
@@ -59,7 +63,8 @@ export const mapStateToProps = (state) => {
 
 export const mapDispatchToProps = (dispatch) => {
   return {
-    getSearch: (input) => dispatch(getSearch(input))
+    getSearch: (input) => dispatch(getSearch(input)),
+    putSearchedGames: () => dispatch(putSearchedGames())
   }
 };
 

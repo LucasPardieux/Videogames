@@ -8,9 +8,10 @@ export const Cards = (props) => {
 
     const eachGame = props.allGames?.map((g) => {
         return (
-            <div className={`${style.eachGame}`}>
+            <div key={g.id} className={`${style.eachGame}`}>
                 <li key={g.id}>
                     <Card
+                        key={g.id}
                         id={g.id}
                         name={g.name}
                         image={g.image}
@@ -27,9 +28,9 @@ export const Cards = (props) => {
   return (
     <div className={`${style.contenedor}`}>
             <div className={`${style.prevNext}`}>
-                <button onClick={props.prevHandler}><AiOutlineArrowLeft/></button>
-                <p>/</p>
-                <button onClick={props.nextHandler}><AiOutlineArrowRight/></button>
+                <input type="number" placeholder={props.currentPage+1}/>
+                <span>/</span>
+                <p>{Math.ceil(props.pageCount)}</p>
             </div>
             <ul className={`${style.ulGame}`}>
                 {props.allGames.length!=0?eachGame:"No games found"}

@@ -60,3 +60,19 @@ export const getSearch = (input) => (dispatch) =>{
     })
     .catch((err)=>console.log(err))
 }
+
+export const putSearchedGames = () => (dispatch) =>{
+    dispatch(setSearch(""))
+    return dispatch(gameSearched([]))
+}
+
+export const getAllGenres = () => (dispatch) => {
+
+    return axios.get(`http://localhost:3001/genres`)
+        .then((response) => response.data)
+        .then((data) => {
+            console.log(data)
+            dispatch(setAllGenres(data))
+        })
+        .catch((error) => console.log(error))
+}
