@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import Home from './components/Home/Home';
 import Landing from './components/Landing/Landing';
 import Nav from './components/Nav/Nav';
+import Details from './components/Details/Details';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route path='/' component={Nav} />
       <Route exact path='/' component={Landing} />
       <Route exact path='/home' component={Home} />
+      <Route exact path='/details/:idGame' component={Details} />
     </BrowserRouter>
   );
 }

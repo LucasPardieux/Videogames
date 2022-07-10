@@ -28,7 +28,7 @@ export const Cards = (props) => {
   return (
     <div className={`${style.contenedor}`}>
             <div className={`${style.prevNext}`}>
-                <input type="number" placeholder={props.currentPage+1}/>
+                <p>{props.currentPage+1}</p>
                 <span>/</span>
                 <p>{Math.ceil(props.pageCount)}</p>
             </div>

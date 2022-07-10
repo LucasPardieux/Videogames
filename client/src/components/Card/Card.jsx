@@ -1,5 +1,6 @@
 import React from 'react'
 import style from "./Card.module.css"
+import { Link } from 'react-router-dom';
 import { FaPlaystation, FaXbox, FaWindows, FaAndroid, FaApple, FaLinux, FaGamepad } from "react-icons/fa"
 import { MdComputer } from "react-icons/md"
 import { SiNintendo, SiWii, SiNintendogamecube, SiAtari, SiSega } from "react-icons/si"
@@ -94,7 +95,7 @@ const Card = (props) => {
                 </div>
                 <div className={`${style.cardInfoNoReq}`}>
                     <span>{platformIcon(props.platforms)}</span>
-                    <button className={`${style.cardDetailsButton}`}>Details</button>
+                    <Link to={`/details/${props.id}`}><button className={`${style.cardDetailsButton}`}>Details</button></Link>
                 </div>
             </div>
         </div>

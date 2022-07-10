@@ -84,7 +84,7 @@ const Home = () => {
           return satDataFromApi(allGames)
         }
 
-        const filteredGames = dataFromApi.filter((r) => {
+        const filteredGames = allGames.filter((r) => {
           if (r.hasOwnProperty("genres")) {
             return r.genres?.map(g=>g.name).includes(genre)
           }

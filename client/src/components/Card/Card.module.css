@@ -111,7 +111,12 @@ body{
     height: 40px;
     color: white;
     background-color: #00749eb1;
-    border: 2px solid #00144b;
+    border: 0;
+    /* border: 2px solid #00144b; */
+}
+
+.cardInfoNoReq button:hover{
+    box-shadow: 0 0 10px #2196f3, 0 0 40px #2196f3, 0 0 80px #2196f3;
 }
 
 h2 {
