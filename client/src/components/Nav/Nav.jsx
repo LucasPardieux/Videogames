@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
-import style from './Nav.module.css'
+import style from './Nav.module.css';
 import logo from '../../images/gamerCaveLogo.png'
-import { getSearch, putSearchedGames } from '../../redux/reducer/reducer';
+import { putSearchedGames, getAllGames, getItemSearch } from '../../redux/reducer/reducer';
 import { BiSearchAlt } from "react-icons/bi";
 
 
@@ -14,12 +14,13 @@ export class Nav extends Component {
         this.searchHandler = this.searchHandler.bind(this);
     }
 
-    searchHandler(){
+    async searchHandler (){
         const input = document.getElementById("inputSearch").value;
-        if(input === ""){
+        if(input === "" || input === " "){
             this.props.putSearchedGames();
         }else{
-            this.props.getSearch(input)
+            this.props.getItemSearch(await this.props.getAllGames(input));
+            this.props.getAllGames(input);
         }
     }
 
@@ -36,7 +37,7 @@ export class Nav extends Component {
                             <Link to='/home' className={`${style.navLink}`}>Home</Link>
                         </li>
                         <li>
-                            <Link to='/home' className={`${style.navLink}`}>Create game</Link>
+                            <Link to='/createVideogame' className={`${style.navLink}`}>Create game</Link>
                         </li>
                         <li>
                             <Link to='/home' className={`${style.navLink}`}>Rankings</Link>
@@ -57,14 +58,16 @@ export class Nav extends Component {
 
 export const mapStateToProps = (state) => {
   return {
-    search: state.videogames.search
+    search: state.videogames.search,
+    itemSearch: state.videogames.itemSearch,
   }
 };
 
 export const mapDispatchToProps = (dispatch) => {
   return {
-    getSearch: (input) => dispatch(getSearch(input)),
-    putSearchedGames: () => dispatch(putSearchedGames())
+    putSearchedGames: () => dispatch(putSearchedGames()),
+    getAllGames: (input) => dispatch(getAllGames(input)),
+    getItemSearch: (data) => dispatch(getItemSearch(data))
   }
 };
 

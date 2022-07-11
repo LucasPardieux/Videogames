@@ -7,6 +7,7 @@ import Home from './components/Home/Home';
 import Landing from './components/Landing/Landing';
 import Nav from './components/Nav/Nav';
 import Details from './components/Details/Details';
+import CreateGame from './components/CreateGame/CreateGame';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route exact path='/' component={Landing} />
       <Route exact path='/home' component={Home} />
       <Route exact path='/details/:idGame' component={Details} />
+      <Route exact path='/createVideogame' component={CreateGame} />
     </BrowserRouter>
   );
 }

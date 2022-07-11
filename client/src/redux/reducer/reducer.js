@@ -4,6 +4,7 @@ import axios from "axios";
 const initialState = {
     allGames: [],
     gameSearched: [],
+    itemSearch:[],//[...this.gameSearched]?.splice(0, 15),
     game: {},
     allGenres: [],
     loading: false,
@@ -32,37 +33,44 @@ export const gameSlice = createSlice({
         gameSearched: function (state, action) {
             state.gameSearched = action.payload
         },
+        setItemSearch: function (state, action) {
+            state.itemSearch = action.payload
+        },
     }
 })
 
-export const { setAllGames, setAllGenres, setGame, setLoading, setSearch, gameSearched } = gameSlice.actions;
+export const { setAllGames, setAllGenres, setGame, setLoading, setSearch, gameSearched, setItemSearch } = gameSlice.actions;
 
 export default gameSlice.reducer;
 
-export const getAllGames = () => async (dispatch) => {
-
+export const getAllGames = (input) => async (dispatch) => {
     try {
-        dispatch(setLoading(true));
-        const games = await axios.get("http://localhost:3001/videogames");
-        dispatch(setAllGames(games.data));
-        dispatch(setLoading(false));
+        if(input===""||input===undefined){
+            dispatch(setLoading(true));
+            const games = await axios.get("http://localhost:3001/videogames");
+            dispatch(setAllGames(games.data));
+            dispatch(setLoading(false));
+        }else{
+            dispatch(setSearch(input))
+    return axios.get(`http://localhost:3001/videogames?name=${input}`)
+        .then((response) => response.data)
+        .then((data) => {
+            console.log(data)
+            dispatch(gameSearched(data))
+            return data;
+        })
+        .catch((err) => console.log(err))
+        }
+        
     } catch (error) {
         alert("Error al requerir los games")
     }
 }
 
-export const getSearch = (input) => (dispatch) => {
-    dispatch(setSearch(input))
-    return axios.get(`http://localhost:3001/videogames?name=${input}`)
-        .then((response) => response.data)
-        .then((data) => {
-            dispatch(gameSearched(data))
-        })
-        .catch((err) => console.log(err))
-}
 
-export const putSearchedGames = () => (dispatch) => {
-    dispatch(setSearch(""))
+export const putSearchedGames = (input) => (dispatch) => {
+    if(input===undefined) dispatch(setSearch(""))
+    else dispatch(setSearch(input))
     return dispatch(gameSearched([]))
 }
 
@@ -86,4 +94,8 @@ export const getGame = (idGame) => async (dispatch) => {
     } catch (error) {
         console.log(error);
     }
+}
+
+export const getItemSearch = (info) => async (dispatch) => {
+    dispatch(setItemSearch(info))
 }
