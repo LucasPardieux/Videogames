@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getAllGames, getAllGenres } from '../../redux/reducer/reducer';
+import { getAllGames, getAllGenres, postGame } from '../../redux/reducer/reducer';
 import style from "./CreateGame.module.css"
 import { connect } from "react-redux";
 import Card from '../Card/Card';
@@ -50,7 +50,7 @@ export class CreateGame extends Component {
             let newArr = preview.genres;
             let index = newArr.findIndex((element) => element.name === value)
             if (index !== -1) {
-                let remove = newArr.splice(index, 1)
+                newArr.splice(index, 1)
                 preview.genres = newArr
             }
             return this.setState({ preview });
@@ -108,7 +108,7 @@ export class CreateGame extends Component {
                 let index = newArr.findIndex((element) => element === value)
                 console.log(index);
                 if (index !== -1) {
-                    let remove = newArr.splice(index, 1)
+                    newArr.splice(index, 1)
                     return { [name]: newArr }
                 }
             })
@@ -128,7 +128,7 @@ export class CreateGame extends Component {
                 let newArr = state.platforms;
                 let index = newArr.findIndex((element) => element === value)
                 if (index !== -1) {
-                    let remove = newArr.splice(index, 1)
+                    newArr.splice(index, 1)
                     return { [name]: newArr }
                 }
             })
@@ -158,7 +158,7 @@ export class CreateGame extends Component {
                 errors.rating = value < 0 || value > 5 ? 'The rating must be in a range between 0 and 5' : '';
                 break;
             case 'image':
-                let urlPattern = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+                let urlPattern = /[-a-zA-Z0-9@:%._~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_.~#?&//=]*)?/gi;
                 errors.image = urlPattern.test(value) ? '' : 'The image url is not valid';
                 break;
             case 'description':
@@ -179,20 +179,28 @@ export class CreateGame extends Component {
 
     handleSubmit(e){
         e.preventDefault();
-        let { name, description, released, rating, genres, platforms } = this.state;
+        let { name, description, released, rating, image, genres, platforms } = this.state;
         name = this.firstWordUpperCase(name);
-        const newGame = {
-            name, description, released, rating, genres, platforms
-        }
             const idGenres = this.props.allGenres?.map((g) => {
                 for(let x in genres){
                     if(genres[x]===g.name){
-                        console.log(g);
                         return g.id;
                     }
                 }
             })
             genres=idGenres.filter((g)=>g!==undefined);
+
+            const newGame = {
+                name, description, released, rating, image, genres, platforms
+            }
+            console.log(newGame);
+            postGame(newGame)
+            .then(()=> {
+                let form = document.getElementById("form")
+                form.reset();
+                this.props.getAllGames();
+                window.alert("successfully created Game")
+            })
     }
 
 
@@ -252,7 +260,7 @@ export class CreateGame extends Component {
                     <Card
                         id={0}
                         name={this.state.preview.name}
-                        image={this.state.preview.image}
+                        image={this.state.preview.image?this.state.preview.image:"https://res.cloudinary.com/lmn/image/upload/e_sharpen:100/f_auto,fl_lossy,q_auto/v1/gameskinnyop/d/7/d/orig_d7dec62511f8a78172d019fbbbb66e36.jpg"}
                         genres={this.state.preview.genres}
                         rating={this.state.preview.rating}
                         platforms={[]}
@@ -273,7 +281,8 @@ export const mapStateToProps = (state) => {
 export const mapDispatchToProps = (dispatch) => {
     return {
         getAllGenres: () => dispatch(getAllGenres()),
-        getAllGames: () => dispatch(getAllGames())
+        getAllGames: () => dispatch(getAllGames()),
+        postGame: () => dispatch(postGame()),
     }
 };
 

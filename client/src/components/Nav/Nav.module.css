@@ -90,3 +90,45 @@
     width: 20px;
     height: 20px;
 }
+
+.inBuild {
+    position: absolute;
+    width: 95px;
+    height: 70px;
+    left: 48%;
+    top: 25%;
+    transition: 0.5s;
+}
+
+.inBuild img{
+    width: inherit;
+    height: inherit;
+    opacity: 0;
+}
+
+.inBuild1 {
+    position: absolute;
+    width: 80px;
+    height: 70px;
+    left: 56%;
+    top: 25%;
+    transition: 0.5s;
+    -webkit-transition: 0.5s;
+    -moz-transition: 0.5s;
+    -ms-transition: 0.5s;
+    -o-transition: 0.5s;
+}
+
+.inBuild1 img{
+    width: inherit;
+    height: inherit;
+    opacity: 0;
+}
+
+.inBuild:hover img{
+    opacity: 1;
+}
+
+.inBuild1:hover img{
+    opacity: 1;
+}

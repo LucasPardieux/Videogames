@@ -2,7 +2,6 @@ import React from 'react'
 import style from "./Card.module.css"
 import { Link } from 'react-router-dom';
 import { FaPlaystation, FaXbox, FaWindows, FaAndroid, FaApple, FaLinux, FaGamepad } from "react-icons/fa"
-import { MdComputer } from "react-icons/md"
 import { SiNintendo, SiWii, SiNintendogamecube, SiAtari, SiSega } from "react-icons/si"
 import { TbDeviceGamepad } from "react-icons/tb"
 import { AiOutlineBuild } from "react-icons/ai"
@@ -13,64 +12,54 @@ const Card = (props) => {
 
     const platformIcon = (platforms) => {
         let platformsArray = [];
-        const ids = platforms?.map((p) => {
-            switch (p.platform.id) {
-                case 187:case 18: case 16: case 15: case 27: case 19: case 17:
-                    platformsArray.push(<FaPlaystation/>)
+        var id;
+        platforms?.map((p) => () => {
+            if(p.hasOwnProperty("platform")){id = p.platform.id}else{id = p}
+            switch (id) {
+                case 187:case 18: case 16: case 15: case 27: case 19: case 17: case "playstation":
+                    platformsArray.push(<FaPlaystation key={id}/>)
                     break;
-                case 4:
-                    platformsArray.push(<FaWindows/>)
+                case 4: case "pc":
+                    platformsArray.push(<FaWindows key={id}/>)
                     break;
-                case 1: case 14: case 80: case 186:
-                    platformsArray.push(<FaXbox/>)
+                case 1: case 14: case 80: case 186: case "xbox":
+                    platformsArray.push(<FaXbox key={id}/>)
                     break;
-                case 21:
-                    platformsArray.push(<FaAndroid/>)
+                case 21: case "android":
+                    platformsArray.push(<FaAndroid key={id}/>)
                     break;
-                case 7: case 8: case 9: case 13: case 83:
-                    platformsArray.push(<SiNintendo/>)
+                case 7: case 8: case 9: case 13: case 83: case "nintendo": case 79: case 49:
+                    platformsArray.push(<SiNintendo key={id}/>)
                     break;
-                case 3: case 5:
-                    platformsArray.push(<FaApple/>)
+                case 3: case 5: case "apple": case 41:
+                    platformsArray.push(<FaApple key={id}/>)
                     break;
-                case 6:
-                    platformsArray.push(<FaLinux/>)
+                case 6: case "linux":
+                    platformsArray.push(<FaLinux key={id}/>)
                     break;
-                case 10: case 11:
-                    platformsArray.push(<SiWii/>)
+                case 10: case 11: case "wii":
+                    platformsArray.push(<SiWii key={id}/>)
                     break;
-                case 105:
-                    platformsArray.push(<SiNintendogamecube/>)
+                case 105: case "gamecube":
+                    platformsArray.push(<SiNintendogamecube key={id}/>)
                     break;
-                case 24: case 43: case 26:
-                    platformsArray.push(<TbDeviceGamepad/>)
+                case 24: case 43: case 26: case "gameBoy":
+                    platformsArray.push(<TbDeviceGamepad key={id}/>)
                     break;
-                case 79: case 49:
-                    platformsArray.push(<SiNintendo/>)
+                case 55: case 166:
+                    platformsArray.push(<AiOutlineBuild key={id}/>)
                     break;
-                case 55:
-                    platformsArray.push(<AiOutlineBuild/>)
+                case 28: case 31: case 23: case 22: case 25: case 34: case 46: case 50: case "atari":
+                    platformsArray.push(<SiAtari key={id}/>)
                     break;
-                case 41:
-                    platformsArray.push(<FaApple/>)
+                case 167: case "genesis":
+                    platformsArray.push(<FaGamepad key={id}/>)
                     break;
-                case 166:
-                    platformsArray.push(<AiOutlineBuild/>)
-                    break;
-                case 28: case 31: case 23: case 22: case 25: case 34: case 46: case 50:
-                    platformsArray.push(<SiAtari/>)
-                    break;
-                case 167:
-                    platformsArray.push(<FaGamepad/>)
-                    break;
-                case 107: case 119: case 117: case 74:
-                    platformsArray.push(<SiSega/>)
-                    break;
-                case 41:
-                    platformsArray.push(<FaApple/>)
+                case 107: case 119: case 117: case 74: case "sega":
+                    platformsArray.push(<SiSega key={id}/>)
                     break;
                 default:
-                    platformsArray.push(<AiOutlineBuild/>)
+                    platformsArray.push(<AiOutlineBuild key={id}/>)
                     break;
             }
         })
@@ -84,14 +73,14 @@ const Card = (props) => {
             <div className={`${style.cardContainer}`}>
 
             <div className={`${style.cardImage}`}>
-                <img src={props.image} alt="videogame Image" />
+                <img src={props.image} alt="videogame" />
             </div>
 
             <div>
                 <div className={`${style.cardInfoReq}`}>
                      <h2>{props.name}</h2>
                      <p>Rating: {props.rating}</p>
-                     <p>Genres: {props.genres?.map((g) => {return <span key={g.id}>{g.name + " / "}</span>})}</p>
+                     <p>Genres: {props.genres?.map((g) => {return <span key={g.name}>{g.name + " / "}</span>})}</p>
                 </div>
                 <div className={`${style.cardInfoNoReq}`}>
                     <span>{platformIcon(props.platforms)}</span>

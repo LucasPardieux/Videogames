@@ -5,6 +5,7 @@ import style from './Nav.module.css';
 import logo from '../../images/gamerCaveLogo.png'
 import { putSearchedGames, getAllGames, getItemSearch } from '../../redux/reducer/reducer';
 import { BiSearchAlt } from "react-icons/bi";
+import inBuild from "../../images/Under-Construction-PNG-Images.png"
 
 
 export class Nav extends Component {
@@ -45,6 +46,12 @@ export class Nav extends Component {
                         <li>
                             <Link to='/home' className={`${style.navLink}`}>About</Link>
                         </li>
+                        <div className={`${style.inBuild}`}>
+                            <img src={inBuild} alt="inBuild" />
+                        </div>
+                        <div className={`${style.inBuild1}`}>
+                            <img src={inBuild} alt="inBuild" />
+                        </div>
                         <li className={`${style.navSearch}`}>
                             <input id='inputSearch' placeholder="Search..." type="text" />
                             <button onClick={this.searchHandler}><BiSearchAlt className={`${style.navSearchIcon}`}/></button>

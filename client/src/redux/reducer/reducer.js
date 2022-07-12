@@ -47,12 +47,12 @@ export const getAllGames = (input) => async (dispatch) => {
     try {
         if(input===""||input===undefined){
             dispatch(setLoading(true));
-            const games = await axios.get("http://localhost:3001/videogames");
+            const games = await axios.get("/videogames");
             dispatch(setAllGames(games.data));
             dispatch(setLoading(false));
         }else{
             dispatch(setSearch(input))
-    return axios.get(`http://localhost:3001/videogames?name=${input}`)
+    return axios.get(`/videogames?name=${input}`)
         .then((response) => response.data)
         .then((data) => {
             console.log(data)
@@ -76,7 +76,7 @@ export const putSearchedGames = (input) => (dispatch) => {
 
 export const getAllGenres = () => (dispatch) => {
 
-    return axios.get(`http://localhost:3001/genres`)
+    return axios.get(`/genres`)
         .then((response) => response.data)
         .then((data) => {
             dispatch(setAllGenres(data))
@@ -87,8 +87,8 @@ export const getAllGenres = () => (dispatch) => {
 export const getGame = (idGame) => async (dispatch) => {
     try {
         dispatch(setLoading(true));
-        const game = await axios.get(`http://localhost:3001/videogame/${idGame}`)
-        console.log(game.data)
+        const game = await axios.get(`/videogame/${idGame}`)
+        console.log(game)
         dispatch(setGame(game.data));
         dispatch(setLoading(false));
     } catch (error) {
@@ -98,4 +98,16 @@ export const getGame = (idGame) => async (dispatch) => {
 
 export const getItemSearch = (info) => async (dispatch) => {
     dispatch(setItemSearch(info))
+}
+
+export const postGame = (data) =>{
+    try {
+        return axios({
+            method: "post",
+            url: "/videogames/",
+            data: data
+        })
+    } catch (error) {
+        return error
+    }
 }

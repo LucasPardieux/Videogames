@@ -1,7 +1,6 @@
 import React from 'react'
 import Card from '../Card/Card';
 import style from "./Cards.module.css"
-import {AiOutlineArrowRight, AiOutlineArrowLeft } from "react-icons/ai"
 
 
 export const Cards = (props) => {
@@ -33,7 +32,7 @@ export const Cards = (props) => {
                 <p>{Math.ceil(props.pageCount)}</p>
             </div>
             <ul className={`${style.ulGame}`}>
-                {props.allGames.length!=0?eachGame:"No games found"}
+                {props.allGames.length!==0?eachGame:"No games found"}
             </ul>
         </div>
   )

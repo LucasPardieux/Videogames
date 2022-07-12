@@ -19,7 +19,7 @@ const Home = () => {
 
     const updateState = () =>{
         let res = dispatch(getAllGames());
-        let res2 = dispatch(getAllGenres());
+        dispatch(getAllGenres());
         return res
     }
 
@@ -33,6 +33,7 @@ const Home = () => {
 
     useEffect(() => {
       if(allGames.length===0) updateState();
+      //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     if (items.length === 0) {
@@ -84,7 +85,7 @@ const Home = () => {
     const genreSelect = (e) => {
         const genre = e.target.value;
         setCurrentPage(0);
-
+        
         if(search!==""){
           if (genre === "null") {
            return dispatch(getItemSearch(gameSearched))
@@ -95,10 +96,12 @@ const Home = () => {
               return r.genres?.map(g=>g.name).includes(genre)
             }
           })
+          console.log(filteredGames);
           return dispatch(getItemSearch(filteredGames))
           //return setItemsSearch(filteredGames)
         
         }else{
+          console.log("entro");
           if (genre === "null") {
             setItems(allGames)
           return satDataFromApi(allGames)
@@ -194,12 +197,9 @@ const Home = () => {
                 return 1;
               } else {
                 return -1;
-              }
-              return 0
-      
+              }      
             })
             return dispatch(getItemSearch(neatArray))
-            //return setItemsSearch(neatArray);
           }else{
             const neatArray = [...allGames].sort((next, prev) => {
     
@@ -207,9 +207,7 @@ const Home = () => {
                 return 1;
               } else {
                 return -1;
-              }
-              return 0
-      
+              }      
             })
             setItems(neatArray.slice(currentPage, currentPage + ITEMS_PER_PAGE));
             satDataFromApi(neatArray)
@@ -227,11 +225,9 @@ const Home = () => {
               } else {
                 return -1;
               }
-              return 0
       
             })
             return dispatch(getItemSearch(neatArray))
-            //return setItemsSearch(neatArray)
           }else{
             const neatArray = [...dataFromApi].sort((next, prev) => {
     
@@ -239,9 +235,7 @@ const Home = () => {
                 return 1;
               } else {
                 return -1;
-              }
-              return 0
-      
+              }      
             })
             setItems(neatArray);
             satDataFromApi(neatArray)
