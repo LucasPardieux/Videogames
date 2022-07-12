@@ -9,10 +9,10 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
+      primaryKey: true
     },
     description: {
       type: DataTypes.TEXT,
@@ -30,6 +30,10 @@ module.exports = (sequelize) => {
     platforms: {
       type: DataTypes.ARRAY(DataTypes.JSONB),
       allowNull: true,
+    },
+    image: {
+      type: DataTypes.TEXT,
+      allowNull:true,
     }
   },{
     timestamps:false

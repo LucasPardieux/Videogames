@@ -21,7 +21,8 @@ module.exports = {
                             where:{id:id},
                             include: Genre
                         })
-                        return infoDB;
+                        console.log(infoDB[0].dataValues)
+                        return infoDB[0];
                     } catch (error) {
                         throw new Error(error);
                     }
@@ -32,7 +33,6 @@ module.exports = {
                 const infoDB = await Videogame.findAll({
                     include: Genre
                 });
-                console.log(info)
                 rpta = info.data.results;
                 arrayConcat = rpta.concat(infoDB);
                 arrayConcat = arrayConcat.map((g)=>{
@@ -40,7 +40,7 @@ module.exports = {
                         id: g.id,
                         name: g.name,
                         released: g.released,
-                        image: g.background_image,
+                        image: g.background_image?g.background_image:g.image,
                         rating: g.rating,
                         platforms: g.platforms,
                         genres: g.genres,

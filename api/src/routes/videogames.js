@@ -22,12 +22,14 @@ router.get("/", async (req,res,next) => {
 })
 
 router.post("/", (req,res,next) =>{
-    const {name, description, release, rating, genreID} = req.body;
+    let {name, description, released, rating, image, genres, platforms} = req.body;
+    console.log(image)
+    if(!image)image="https://res.cloudinary.com/lmn/image/upload/e_sharpen:100/f_auto,fl_lossy,q_auto/v1/gameskinnyop/d/7/d/orig_d7dec62511f8a78172d019fbbbb66e36.jpg"
     Videogame.create({
-        name, description, release, rating,
+        name, description, released, rating, image, platforms
     })
     .then(game =>{
-        game.addGenre(genreID);
+        game.addGenre(genres);
         res.status(201).send(game);
     })
     .catch (error=>{
