@@ -21,7 +21,6 @@ module.exports = {
                             where:{id:id},
                             include: Genre
                         })
-                        console.log(infoDB[0].dataValues)
                         return infoDB[0];
                     } catch (error) {
                         throw new Error(error);
@@ -60,21 +59,18 @@ module.exports = {
         try {
             const info = await axios.get(`https://api.rawg.io/api/games?search=${name}&key=${API_KEY}`)
             const infoDB = await Videogame.findAll({
-                where:{
-                    name:name
-                },
                 include: Genre
             });
+            const gameSearched = infoDB.filter((g)=>g.dataValues.name.toUpperCase().includes(name.toUpperCase()))
             rpta = info.data.results;
-            arrayConcat = rpta.concat(infoDB);
-            
+            arrayConcat = gameSearched.concat(rpta);
             let arrayAux = arrayConcat.map((g, i)=>{
                 if(i < 15){
                     let newObj = {
                         id:g.id,
                         name: g.name,
                         released: g.released,
-                        image: g.background_image,
+                        image: g.background_image?g.background_image:g.image,
                         rating: g.rating,
                         platforms: g.platforms,
                         genres: g.genres,

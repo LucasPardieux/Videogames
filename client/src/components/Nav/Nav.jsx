@@ -6,20 +6,24 @@ import logo from '../../images/gamerCaveLogo.png'
 import { putSearchedGames, getAllGames, getItemSearch } from '../../redux/reducer/reducer';
 import { BiSearchAlt } from "react-icons/bi";
 import inBuild from "../../images/Under-Construction-PNG-Images.png"
+import {ImMenu} from "react-icons/im"
+import {HiRefresh} from "react-icons/hi"
+
+
 
 
 export class Nav extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.searchHandler = this.searchHandler.bind(this);
     }
 
-    async searchHandler (){
+    async searchHandler() {
         const input = document.getElementById("inputSearch").value;
-        if(input === "" || input === " "){
+        if (input === "" || input === " ") {
             this.props.putSearchedGames();
-        }else{
+        } else {
             this.props.getItemSearch(await this.props.getAllGames(input));
             this.props.getAllGames(input);
         }
@@ -29,16 +33,16 @@ export class Nav extends Component {
     render() {
         return (
             <div className={`${style.navContainer}`}>
-                <div className={`${style.navLogo}`}>
-                    <img src={logo} alt="gamerCave Logo" />
-                </div>
-                <nav>
-                    <ul className={`${style.navList}`}>
+                <nav className={`${style.nav}`}>
+                    <ul className={`${style.navList}`}> 
+                        <div className={`${style.navLogo}`}>
+                            <img src={logo} alt="gamerCave Logo" />
+                        </div>
                         <li>
                             <Link to='/home' className={`${style.navLink}`}>Home</Link>
                         </li>
                         <li>
-                            <Link to='/createVideogame' className={`${style.navLink}`}>Create game</Link>
+                            <Link to='/createVideogame' className={`${style.navLink}`}>Create</Link>
                         </li>
                         <li>
                             <Link to='/home' className={`${style.navLink}`}>Rankings</Link>
@@ -54,7 +58,10 @@ export class Nav extends Component {
                         </div>
                         <li className={`${style.navSearch}`}>
                             <input id='inputSearch' placeholder="Search..." type="text" />
-                            <button onClick={this.searchHandler}><BiSearchAlt className={`${style.navSearchIcon}`}/></button>
+                            <button onClick={this.searchHandler}><BiSearchAlt className={`${style.navSearchIcon}`} /></button>
+                        </li>
+                        <li>
+                            <HiRefresh className={`${style.refreshIcon}`}/>
                         </li>
                     </ul>
                 </nav>
@@ -64,18 +71,18 @@ export class Nav extends Component {
 }
 
 export const mapStateToProps = (state) => {
-  return {
-    search: state.videogames.search,
-    itemSearch: state.videogames.itemSearch,
-  }
+    return {
+        search: state.videogames.search,
+        itemSearch: state.videogames.itemSearch,
+    }
 };
 
 export const mapDispatchToProps = (dispatch) => {
-  return {
-    putSearchedGames: () => dispatch(putSearchedGames()),
-    getAllGames: (input) => dispatch(getAllGames(input)),
-    getItemSearch: (data) => dispatch(getItemSearch(data))
-  }
+    return {
+        putSearchedGames: () => dispatch(putSearchedGames()),
+        getAllGames: (input) => dispatch(getAllGames(input)),
+        getItemSearch: (data) => dispatch(getItemSearch(data))
+    }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Nav)
