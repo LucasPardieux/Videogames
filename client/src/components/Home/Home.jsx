@@ -6,13 +6,14 @@ import { useState, useEffect } from 'react';
 import { Cards } from '../Cards/Cards';
 import headerVideo from "../../images/header_l77cMXfi.mp4";
 import { AiOutlineArrowRight, AiOutlineArrowLeft } from "react-icons/ai";
+import {HiRefresh} from "react-icons/hi"
 
 
 const Home = () => {
 
   const allGames = useSelector(state => state.videogames.allGames);
   const search = useSelector(state => state.videogames.search);
-  const itemSearch = useSelector(state => state.videogames.itemSearch)
+  const itemSearch = useSelector(state => state.videogames.itemSearch);
   const gameSearched = useSelector(state => state.videogames.gameSearched);
   const allGenres = useSelector(state => state.videogames.allGenres);
   const dispatch = useDispatch();
@@ -32,6 +33,7 @@ const Home = () => {
   let pageCount = dataFromApi.length / ITEMS_PER_PAGE;
 
   useEffect(() => {
+    setCurrentPage(0);
     if (allGames.length === 0) updateState();
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -58,9 +60,10 @@ const Home = () => {
   const filteredGames = () => {
 
     if (search !== "" || search === undefined) {
-      return itemSearch.slice(currentPage, currentPage + ITEMS_PER_PAGE)
+      return itemSearch
+      /*?.slice(currentPage, currentPage + ITEMS_PER_PAGE)*/
     }
-    return items.slice(currentPage, currentPage + ITEMS_PER_PAGE)
+    return items?.slice(currentPage, currentPage + ITEMS_PER_PAGE)
 
   }
   const nextHandler = () => {
@@ -244,9 +247,10 @@ const Home = () => {
     }
   }
 
-  const apiDataBase = (e) => {
-    const value = e.target.value;
+  const apiDataBase = async (e) => {
+    let value = e.target.value;
     setCurrentPage(0);
+    
     pageCount = 0;
     if (value === "api") {
       if (search !== "") {
@@ -254,7 +258,7 @@ const Home = () => {
         return dispatch(getItemSearch(neatArray))
       }else{
         const neatArray = [...allGames].filter((e) => typeof(e.id)==="number")
-        setItems(neatArray.slice(currentPage, currentPage + ITEMS_PER_PAGE));
+        setItems(neatArray.slice(0, 0 + ITEMS_PER_PAGE));
         satDataFromApi(neatArray)
         return;
       }
@@ -265,17 +269,27 @@ const Home = () => {
         return dispatch(getItemSearch(neatArray))
       }else{
         const neatArray = [...allGames].filter((e) => typeof(e.id)==="string")
-        setItems(neatArray.slice(currentPage, currentPage + ITEMS_PER_PAGE));
+        setItems(neatArray.slice(0, 0 + ITEMS_PER_PAGE));
         satDataFromApi(neatArray)
         return;
       }
     }
   }
 
+  const refreshHandler = () => {
+    setCurrentPage(0)
+    if(search===""){
+      setItems(allGames)
+      satDataFromApi(allGames)
+    }else{
+      setDataSearchedFromApi(gameSearched)
+      dispatch(getItemSearch(gameSearched))
+    }
+  }
+
 
   return (
     <div className={`${style.homeAll}`}>
-      {console.log(currentPage)}
       <div className={`${style.homeVideo}`}>
         <video loop muted autoPlay="autoplay" src={`${headerVideo}`} poster="https://images4.alphacoders.com/903/thumb-1920-903637.jpg" />
       </div>
@@ -299,6 +313,9 @@ const Home = () => {
           </select></li>
 
         </ul>
+      </div>
+      <div className={`${style.refreshCont}`}>
+      <button className={`${style.refreshButton}`} onClick={(e) => refreshHandler(e)} value={"db"}><HiRefresh/></button>
       </div>
       <div className={`${style.homeContainer}`}>
         <ul>

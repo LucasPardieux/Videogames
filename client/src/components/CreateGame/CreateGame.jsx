@@ -219,7 +219,7 @@ export class CreateGame extends Component {
                                 <input name="released" type="date" onChange={(e) => {this.handleChange(e)}} />
                                 {!this.state.errors.released ? null : <div className={`${style.error}`}>{this.state.errors.released}</div>}
                                 <h5>Rating:</h5>
-                                <input name="rating" type="number" step={0.01} min={0} max={5} onChange={(e) => { this.fillPreview(e); this.handleChange(e) }} />
+                                <input name="rating" type="number" step={0.01} maxLength={4} onChange={(e) => { this.fillPreview(e); this.handleChange(e) }} />
                                 {!this.state.errors.rating ? null : <div className={`${style.error}`}>{this.state.errors.rating}</div>}
                                 <h5>image URL:</h5>
                                 <input name="image" type="text" onChange={(e) => { this.fillPreview(e); this.handleChange(e) }} />
