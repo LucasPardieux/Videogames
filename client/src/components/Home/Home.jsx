@@ -203,7 +203,7 @@ const Home = () => {
         })
         return dispatch(getItemSearch(neatArray))
       } else {
-        const neatArray = [...allGames].sort((next, prev) => {
+        const neatArray = [...dataFromApi].sort((next, prev) => {
 
           if (prev.rating < next.rating) {
             return 1;
@@ -211,7 +211,7 @@ const Home = () => {
             return -1;
           }
         })
-        setItems(neatArray.slice(currentPage, currentPage + ITEMS_PER_PAGE));
+        setItems(neatArray);
         satDataFromApi(neatArray)
         return;
       }

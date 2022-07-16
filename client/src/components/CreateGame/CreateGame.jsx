@@ -44,7 +44,9 @@ export class CreateGame extends Component {
         const name = e.target.name;
         let preview = this.state.preview;
         const check = e.target.checked;
-        console.log(value.name);
+
+        if(name === "rating" && this.state.rating.length>=5) return;
+
 
         if (name === "genres" && check === false) {
             let newArr = preview.genres;
@@ -102,6 +104,7 @@ export class CreateGame extends Component {
         const check = e.target.checked;
         let errors = this.state.errors;
 
+
         if (name === 'genres' && check === false) {
             this.setState((state) => {
                 let newArr = state.genres;
@@ -155,7 +158,7 @@ export class CreateGame extends Component {
                 errors.released = dateNow<fechas? 'The date entered is invalid.' : '';
                 break;
             case 'rating':
-                errors.rating = value < 0 || value > 5 ? 'The rating must be in a range between 0 and 5' : '';
+                errors.rating = (value < 0 || value > 5) || this.state.rating.length>=5 ? 'The rating must be in a range between 0 and 5 and you must enter less than 5 characters' : '';
                 break;
             case 'image':
                 let urlPattern = /[-a-zA-Z0-9@:%._~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_.~#?&//=]*)?/gi;
