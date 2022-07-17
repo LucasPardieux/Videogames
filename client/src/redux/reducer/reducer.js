@@ -52,11 +52,12 @@ export const getAllGames = (input) => async (dispatch) => {
             dispatch(setLoading(false));
         }else{
             dispatch(setSearch(input))
+            dispatch(setLoading(true));
     return axios.get(`/videogames?name=${input}`)
         .then((response) => response.data)
         .then((data) => {
-            console.log(data)
             dispatch(gameSearched(data))
+            dispatch(setLoading(false));
             return data;
         })
         .catch((err) => console.log(err))
@@ -66,7 +67,6 @@ export const getAllGames = (input) => async (dispatch) => {
         alert("Error al requerir los games")
     }
 }
-
 
 export const putSearchedGames = (input) => (dispatch) => {
     if(input===undefined) dispatch(setSearch(""))

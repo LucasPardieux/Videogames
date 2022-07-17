@@ -7,12 +7,14 @@ import { Cards } from '../Cards/Cards';
 import headerVideo from "../../images/header_l77cMXfi.mp4";
 import { AiOutlineArrowRight, AiOutlineArrowLeft } from "react-icons/ai";
 import {HiRefresh} from "react-icons/hi"
+import Loading from '../Loading/Loading';
 
 
 const Home = () => {
 
   const allGames = useSelector(state => state.videogames.allGames);
   const search = useSelector(state => state.videogames.search);
+  const loading = useSelector(state => state.videogames.loading);
   const itemSearch = useSelector(state => state.videogames.itemSearch);
   const gameSearched = useSelector(state => state.videogames.gameSearched);
   const allGenres = useSelector(state => state.videogames.allGenres);
@@ -57,6 +59,7 @@ const Home = () => {
       }
     }
   }
+  
   const filteredGames = () => {
 
     if (search !== "" || search === undefined) {
@@ -320,7 +323,7 @@ const Home = () => {
       <div className={`${style.homeContainer}`}>
         <ul>
           {
-            search === "" ? <Cards allGames={filteredGames()} pageCount={pageCount} currentPage={currentPage} /> : <Cards allGames={filteredGames()} pageCount={1} currentPage={currentPage} />
+            loading=== true? <div className={`${style.loading}`}><Loading></Loading></div>: search === "" ? <Cards allGames={filteredGames()} pageCount={pageCount} currentPage={currentPage} /> : <Cards allGames={filteredGames()} pageCount={1} currentPage={currentPage} />
           }
         </ul>
       </div>
