@@ -1,20 +1,74 @@
 import React from 'react'
-import style from "./Card.module.css"
-import { Link } from 'react-router-dom';
+import style from "./FavoriteCard.module.css"
+import { ImStarEmpty, ImStarHalf, ImStarFull } from "react-icons/im";
 import { FaPlaystation, FaXbox, FaWindows, FaAndroid, FaApple, FaLinux, FaGamepad } from "react-icons/fa"
 import { SiNintendo, SiWii, SiNintendogamecube, SiAtari, SiSega } from "react-icons/si"
 import { TbDeviceGamepad } from "react-icons/tb"
 import { AiOutlineBuild } from "react-icons/ai"
 import { MdOutlineFavoriteBorder, MdOutlineFavorite } from "react-icons/md"
-import { getFavorites, remFavorite } from '../../redux/reducer/reducer'
 import { useDispatch, useSelector } from 'react-redux';
+import { getFavorites, remFavorite } from '../../../redux/reducer/reducer.js'
 
 
-
-const Card = (props) => {
+const FavoriteCard = ({ props }) => {
 
     const favorites = useSelector(state => state.videogames.favorites)
     const dispatch = useDispatch();
+
+    const ratingStars = (r) => {
+        switch (true) {
+            case r === 0:
+                return [<ImStarEmpty />, <ImStarEmpty/>, <ImStarEmpty/>, <ImStarEmpty/>, <ImStarEmpty/>]
+                
+            case r > 0 && r < 0.5:
+                return [<ImStarEmpty />, <ImStarEmpty/>, <ImStarEmpty/>, <ImStarEmpty/>, <ImStarEmpty/>]
+                
+            case r >= 0.5 && r < 1:
+                return [<ImStarHalf />, <ImStarEmpty/>, <ImStarEmpty/>, <ImStarEmpty/>, <ImStarEmpty/>]
+                
+            case r === 1:
+                return [<ImStarFull />, <ImStarEmpty/>, <ImStarEmpty/>, <ImStarEmpty/>, <ImStarEmpty/>]
+                
+            case r > 1 && r < 1.5:
+                return [<ImStarFull />, <ImStarEmpty/>, <ImStarEmpty/>, <ImStarEmpty/>, <ImStarEmpty/>]
+                
+            case r >= 1.5 && r < 2:
+                return [<ImStarFull />, <ImStarHalf />, <ImStarEmpty/>, <ImStarEmpty/>, <ImStarEmpty/>]
+                
+            case r === 2:
+                return [<ImStarFull />, <ImStarFull />, <ImStarEmpty/>, <ImStarEmpty/>, <ImStarEmpty/>]
+                
+            case r > 2 && r < 2.5:
+                return [<ImStarFull />, <ImStarFull />, <ImStarEmpty/>, <ImStarEmpty/>, <ImStarEmpty/>]
+                
+            case r >= 2.5 && r < 3:
+                return [<ImStarFull />, <ImStarFull />, <ImStarHalf />, <ImStarEmpty/>, <ImStarEmpty/>]
+                
+            case r === 3:
+                return [<ImStarFull />, <ImStarFull />, <ImStarFull />, <ImStarEmpty/>, <ImStarEmpty/>]
+                
+            case r > 3 && r < 3.5:
+                return [<ImStarFull />, <ImStarFull />, <ImStarFull />, <ImStarEmpty/>, <ImStarEmpty/>]
+                
+            case r >= 3.5 && r < 4:
+                return [<ImStarFull />, <ImStarFull />, <ImStarFull />, <ImStarHalf />, <ImStarEmpty/>]
+                
+            case r === 4:
+                return [<ImStarFull />, <ImStarFull />, <ImStarFull />, <ImStarFull />, <ImStarEmpty/>]
+                
+            case r > 4 && r < 4.5:
+                return [<ImStarFull />, <ImStarFull />, <ImStarFull />, <ImStarFull />, <ImStarEmpty/>]
+                
+            case r >= 4.5 && r < 5:
+                return [<ImStarFull />, <ImStarFull />, <ImStarFull />, <ImStarFull />, <ImStarHalf />]
+                
+            case r ===5:
+                return [<ImStarFull />, <ImStarFull />, <ImStarFull />, <ImStarFull />, <ImStarFull />]
+                
+            default:
+                break;
+        }
+    }
 
     const platformIcon = (platforms) => {
         let platformsArray = [];
@@ -94,33 +148,29 @@ const Card = (props) => {
         }
     }
 
-
     return (
-        <div className={`${style.cardContainerBefore}`}>
-            {console.log(favorites)}
-            <div className={`${style.cardContainer}`}>
-
-            <div className={`${style.cardImage}`}>
-                <img src={props.image} alt="videogame" />
-            </div>
-
+        <div className={`${style.contExt}`}>
+        <div className={`${style.contenedor}`}>
             <div>
-                <div className={`${style.cardInfoReq}`}>
-                     <h2>{props.name}</h2>
-                     <p>Rating: {props.rating}</p>
-                     <p>Genres: {props.genres?.map((g) => {return <span key={g.name}>{` / ${g.name}`}</span>})}</p>
-                </div>
-                <div className={`${style.cardInfoNoReq}`}>
+            <div className={`${style.imageCont}`}>
+                <img src={props.image} alt="Game Card" />
+            </div>
+                <div className={`${style.information}`}>
+                    <h2>{props.name}</h2>
+                    <p>Platforms:    <span className={`${style.platforms}`}>{platformIcon(props.platforms)}</span></p>
+                    <p>Genres: {props.genres?.map((g) => { return <span key={g.name}>{` / ${g.name}`}</span> })}</p>
+                    <div className={`${style.starsSpan}`}>
+                        <span>{ratingStars(props.rating)}</span>
+                    </div>
                     <span className={`${style.iconFavorite}`} onClick={(e) => {addFavorite(props)}}>
                     {showFavorite(props)}
                     </span>
-                    <span>{platformIcon(props.platforms)}</span>
-                    <Link to={`/details/${props.id}`}><button className={`${style.cardDetailsButton}`}>Details</button></Link>
                 </div>
+                
             </div>
         </div>
         </div>
     )
 }
 
-export default Card
+export default FavoriteCard
