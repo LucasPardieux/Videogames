@@ -91,6 +91,10 @@ body{
     word-wrap: break-word;
 }
 
+.cardInfoReq span{
+    color: gray;
+}
+
 .cardInfoNoReq {
     position: absolute;
     display: flex;
