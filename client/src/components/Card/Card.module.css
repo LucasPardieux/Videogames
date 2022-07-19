@@ -31,6 +31,10 @@ body{
     background-color: red;
     z-index: -1;
     transition: 0.5s;
+    -webkit-transition: 0.5s;
+    -moz-transition: 0.5s;
+    -ms-transition: 0.5s;
+    -o-transition: 0.5s;
 }
 
 .cardContainer::after {
@@ -45,15 +49,30 @@ body{
     z-index: -2;
     filter: blur(50px);
     -webkit-filter: blur(50px);
+    transition: 0.5s;
+    -webkit-transition: 0.5s;
+    -moz-transition: 0.5s;
+    -ms-transition: 0.5s;
+    -o-transition: 0.5s;
 }
 
 .cardContainer::before,
 .cardContainer::after {
+    transition: 0.5s;
+    -webkit-transition: 0.5s;
+    -moz-transition: 0.5s;
+    -ms-transition: 0.5s;
+    -o-transition: 0.5s;
     background: linear-gradient(235deg, #c23616, #010615, #fbc531);
 }
 
 .cardContainer:hover::before,
 .cardContainer:hover::after {
+    transition: 0.5s;
+    -webkit-transition: 0.5s;
+    -moz-transition: 0.5s;
+    -ms-transition: 0.5s;
+    -o-transition: 0.5s;
     background: linear-gradient(235deg, #4cd137, #010615, #00a8ff);
 }
 

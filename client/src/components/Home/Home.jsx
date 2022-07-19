@@ -85,7 +85,7 @@ const Home = () => {
         if (genre === "null") {
           satDataFromApi(gameSearched)
           setFilteredGenres([])
-          return dispatch(getItemSearch(gameSearched))
+          return dispatch(getItemSearch(gameSearched?.slice(currentPage, currentPage + ITEMS_PER_PAGE)))
           //return setItemsSearch(DataSearchedFromApi)
         }
         const filteredGames = gameSearched.filter((r) => {
@@ -100,13 +100,13 @@ const Home = () => {
           return ;
         }
           satDataFromApi(filteredGames)
-        return dispatch(getItemSearch(filteredGames))
+        return dispatch(getItemSearch(filteredGames?.slice(currentPage, currentPage + ITEMS_PER_PAGE)))
         //return setItemsSearch(filteredGames)
   
       } else {
         if (genre === "null") {
           setFilteredGenres([])
-          setItems(allGames)
+          setItems(allGames?.slice(currentPage, currentPage + ITEMS_PER_PAGE))
           return satDataFromApi(allGames)
         }
   
@@ -122,7 +122,7 @@ const Home = () => {
           return ;
         }
         satDataFromApi(filteredGames)
-        setItems(filteredGames)
+        setItems(filteredGames?.slice(currentPage, currentPage + ITEMS_PER_PAGE))
       }
   }
 
@@ -143,7 +143,7 @@ const Home = () => {
           }
           return 0;
         })
-        return dispatch(getItemSearch(neatArray))
+        return dispatch(getItemSearch(neatArray?.slice(currentPage, currentPage + ITEMS_PER_PAGE)))
         //return setItemsSearch(neatArray)
       } else {
         const neatArray = [...dataFromApi].sort((prev, next) => {
@@ -155,7 +155,7 @@ const Home = () => {
           }
           return 0;
         })
-        setItems(neatArray);
+        setItems(neatArray?.slice(currentPage, currentPage + ITEMS_PER_PAGE));
         return satDataFromApi(neatArray)
       }
 
@@ -171,7 +171,7 @@ const Home = () => {
           }
           return 0;
         })
-        return dispatch(getItemSearch(neatArray))
+        return dispatch(getItemSearch(neatArray?.slice(currentPage, currentPage + ITEMS_PER_PAGE)))
         //return setItemsSearch(neatArray)
       } else {
         const neatArray = [...dataFromApi].sort((prev, next) => {
@@ -183,7 +183,7 @@ const Home = () => {
           }
           return 0;
         })
-        setItems(neatArray);
+        setItems(neatArray?.slice(currentPage, currentPage + ITEMS_PER_PAGE));
         satDataFromApi(neatArray)
         return;
       }
@@ -206,7 +206,7 @@ const Home = () => {
             return -1;
           }
         })
-        return dispatch(getItemSearch(neatArray))
+        return dispatch(getItemSearch(neatArray?.slice(currentPage, currentPage + ITEMS_PER_PAGE)))
       } else {
         const neatArray = [...dataFromApi].sort((next, prev) => {
 
@@ -216,7 +216,7 @@ const Home = () => {
             return -1;
           }
         })
-        setItems(neatArray);
+        setItems(neatArray?.slice(currentPage, currentPage + ITEMS_PER_PAGE));
         satDataFromApi(neatArray)
         return;
       }
@@ -234,7 +234,7 @@ const Home = () => {
           }
 
         })
-        return dispatch(getItemSearch(neatArray))
+        return dispatch(getItemSearch(neatArray?.slice(currentPage, currentPage + ITEMS_PER_PAGE)))
       } else {
         const neatArray = [...dataFromApi].sort((next, prev) => {
 
@@ -244,7 +244,7 @@ const Home = () => {
             return -1;
           }
         })
-        setItems(neatArray);
+        setItems(neatArray?.slice(currentPage, currentPage + ITEMS_PER_PAGE));
         satDataFromApi(neatArray)
         return;
       }
@@ -255,6 +255,7 @@ const Home = () => {
   const apiDataBase = async (e) => {
     let value = e.target.value;
     setCurrentPage(0);
+    setFilteredGenres([]);
     
     pageCount = 0;
     if (value === "api") {
@@ -288,11 +289,11 @@ const Home = () => {
     dispatch(getAllGames());
     setFilteredGenres([])
     if(search===""){
-      setItems(allGames)
+      setItems(allGames?.slice(currentPage, currentPage + ITEMS_PER_PAGE))
       satDataFromApi(allGames)
     }else{
       dispatch(getAllGames());
-      dispatch(getItemSearch(gameSearched))
+      dispatch(getItemSearch(gameSearched?.slice(currentPage, currentPage + ITEMS_PER_PAGE)))
     }
   }
 
@@ -324,7 +325,6 @@ const Home = () => {
         </ul>
       </div>
       <div className={`${style.genresContainer}`}>
-        {console.log(filteredGenres)}
           <ul>
           {filteredGenres?.map((f) => {
               return (<li>
