@@ -1,13 +1,15 @@
 import React from 'react'
 import { useSelector, useDispatch } from "react-redux";
-import { getAllGames, getAllGenres, getItemSearch, setGames } from '../../redux/reducer/reducer';
+import { getAllGames, getAllGenres, getItemSearch } from '../../redux/reducer/reducer';
 import style from "./Home.module.css";
 import { useState, useEffect } from 'react';
 import { Cards } from '../Cards/Cards';
 import headerVideo from "../../images/header_l77cMXfi.mp4";
 import { AiOutlineArrowRight, AiOutlineArrowLeft } from "react-icons/ai";
-import {HiRefresh} from "react-icons/hi"
+import { HiRefresh } from "react-icons/hi"
+import { BsArrowUpShort } from "react-icons/bs"
 import Loading from '../Loading/Loading';
+
 
 
 const Home = () => {
@@ -40,13 +42,30 @@ const Home = () => {
   }, [])
 
   if (items.length === 0) {
-      if (allGames.length !== 0) {
-        setItems([...dataFromApi].splice(0, ITEMS_PER_PAGE))
-        satDataFromApi(allGames)
-      }
+    if (allGames.length !== 0) {
+      setItems([...dataFromApi].splice(0, ITEMS_PER_PAGE))
+      satDataFromApi(allGames)
+    }
   }
 
-  
+  window.onscroll = function () {
+    if (document.documentElement.scrollTop > 600 || document.documentElement.scrollTop > 700) {
+      document.querySelector("#goTopCont")?.classList.add("Home_show__KPDPq")
+    } else {
+      document.querySelector("#goTopCont")?.classList.remove("Home_show__KPDPq")
+    }
+  }
+
+  const goUp = () => {
+     window.scrollTo({
+      top: 0,
+      behavior: "smooth" 
+    })
+  }
+
+
+
+
   const filteredGames = () => {
 
     if (search !== "" || search === undefined) {
@@ -81,50 +100,50 @@ const Home = () => {
     const genre = e.target.value;
     setCurrentPage(0);
 
-      if (search !== "") {
-        if (genre === "null") {
-          satDataFromApi(gameSearched)
-          setFilteredGenres([])
-          return dispatch(getItemSearch(gameSearched?.slice(currentPage, currentPage + ITEMS_PER_PAGE)))
-          //return setItemsSearch(DataSearchedFromApi)
-        }
-        const filteredGames = gameSearched.filter((r) => {
-          if (r.hasOwnProperty("genres")) {
-            return r.genres?.map(g => g.name).includes(genre)
-          }
-        })
-        if(filteredGenres.includes(genre)) return;
-        setFilteredGenres([...filteredGenres, e.target.value])
-        if(filteredGames.length ===0) {
-          dispatch(getItemSearch([{name:"Game not found", id:"1f8p", image:"https://www.purposegames.com/images/games/background/271/271929.png"}]))
-          return ;
-        }
-          satDataFromApi(filteredGames)
-        return dispatch(getItemSearch(filteredGames?.slice(currentPage, currentPage + ITEMS_PER_PAGE)))
-        //return setItemsSearch(filteredGames)
-  
-      } else {
-        if (genre === "null") {
-          setFilteredGenres([])
-          setItems(allGames?.slice(currentPage, currentPage + ITEMS_PER_PAGE))
-          return satDataFromApi(allGames)
-        }
-  
-        const filteredGames = dataFromApi.filter((r) => {
-          if (r.hasOwnProperty("genres")) {
-            return r.genres?.map(g => g.name).includes(genre)
-          }
-        })
-        if(filteredGenres.includes(genre)) return;
-        setFilteredGenres([...filteredGenres, e.target.value])
-        if(filteredGames.length ===0) {
-          setItems([{name:"Game not found", id:"1f8p", image:"https://www.purposegames.com/images/games/background/271/271929.png"}])
-          return ;
-        }
-        satDataFromApi(filteredGames)
-        setItems(filteredGames?.slice(currentPage, currentPage + ITEMS_PER_PAGE))
+    if (search !== "") {
+      if (genre === "null") {
+        satDataFromApi(gameSearched)
+        setFilteredGenres([])
+        return dispatch(getItemSearch(gameSearched?.slice(currentPage, currentPage + ITEMS_PER_PAGE)))
+        //return setItemsSearch(DataSearchedFromApi)
       }
-  }
+      const filteredGames = gameSearched.filter((r) => {
+        if (r.hasOwnProperty("genres")) {
+          return r.genres?.map(g => g.name).includes(genre)
+        }
+      })
+      if (filteredGenres.includes(genre)) return;
+      setFilteredGenres([...filteredGenres, e.target.value])
+      if (filteredGames.length === 0) {
+        dispatch(getItemSearch([{ name: "Game not found", id: "1f8p", image: "https://www.purposegames.com/images/games/background/271/271929.png" }]))
+        return;
+      }
+      satDataFromApi(filteredGames)
+      return dispatch(getItemSearch(filteredGames?.slice(currentPage, currentPage + ITEMS_PER_PAGE)))
+      //return setItemsSearch(filteredGames)
+
+    } else {
+      if (genre === "null") {
+        setFilteredGenres([])
+        setItems(allGames?.slice(currentPage, currentPage + ITEMS_PER_PAGE))
+        return satDataFromApi(allGames)
+      }
+
+      const filteredGames = dataFromApi.filter((r) => {
+        if (r.hasOwnProperty("genres")) {
+          return r.genres?.map(g => g.name).includes(genre)
+        }
+      })
+      if (filteredGenres.includes(genre)) return;
+      setFilteredGenres([...filteredGenres, e.target.value])
+      if (filteredGames.length === 0) {
+        setItems([{ name: "Game not found", id: "1f8p", image: "https://www.purposegames.com/images/games/background/271/271929.png" }])
+        return;
+      }
+      satDataFromApi(filteredGames)
+      setItems(filteredGames?.slice(currentPage, currentPage + ITEMS_PER_PAGE))
+    }
+  };
 
   const alphaOrder = (e) => {
     const value = e.target.value;
@@ -134,7 +153,7 @@ const Home = () => {
 
     if (value === "up") {
       if (search !== "") {
-        const neatArray = [...gameSearched].sort((prev, next) => {
+        const neatArray = [...itemSearch].sort((prev, next) => {
           if (prev.name > next.name) {
             return 1;
           }
@@ -155,14 +174,14 @@ const Home = () => {
           }
           return 0;
         })
-        setItems(neatArray?.slice(currentPage, currentPage + ITEMS_PER_PAGE));
+        setItems(neatArray?.slice(0, 0 + ITEMS_PER_PAGE));
         return satDataFromApi(neatArray)
       }
 
     }
     if (value === "down") {
       if (search !== "") {
-        const neatArray = [...gameSearched].sort((prev, next) => {
+        const neatArray = [...itemSearch].sort((prev, next) => {
           if (prev.name > next.name) {
             return -1;
           }
@@ -183,7 +202,7 @@ const Home = () => {
           }
           return 0;
         })
-        setItems(neatArray?.slice(currentPage, currentPage + ITEMS_PER_PAGE));
+        setItems(neatArray?.slice(0, 0 + ITEMS_PER_PAGE));
         satDataFromApi(neatArray)
         return;
       }
@@ -198,7 +217,7 @@ const Home = () => {
 
     if (value === "down") {
       if (search !== "") {
-        const neatArray = [...gameSearched].sort((next, prev) => {
+        const neatArray = [...itemSearch].sort((next, prev) => {
 
           if (prev.rating < next.rating) {
             return 1;
@@ -216,7 +235,7 @@ const Home = () => {
             return -1;
           }
         })
-        setItems(neatArray?.slice(currentPage, currentPage + ITEMS_PER_PAGE));
+        setItems(neatArray?.slice(0, 0 + ITEMS_PER_PAGE));
         satDataFromApi(neatArray)
         return;
       }
@@ -225,7 +244,7 @@ const Home = () => {
 
     if (value === "up") {
       if (search !== "") {
-        const neatArray = [...gameSearched].sort((next, prev) => {
+        const neatArray = [...itemSearch].sort((next, prev) => {
 
           if (prev.rating > next.rating) {
             return 1;
@@ -244,7 +263,7 @@ const Home = () => {
             return -1;
           }
         })
-        setItems(neatArray?.slice(currentPage, currentPage + ITEMS_PER_PAGE));
+        setItems(neatArray?.slice(0, 0 + ITEMS_PER_PAGE));
         satDataFromApi(neatArray)
         return;
       }
@@ -257,17 +276,17 @@ const Home = () => {
     setCurrentPage(0);
     setFilteredGenres([]);
     var options = document.getElementById("selectGenre")
-      for (var i = 0, l = options.length; i < l; i++) {
-        options[i].selected = options[i].defaultSelected;
-      }
-    
+    for (var i = 0, l = options.length; i < l; i++) {
+      options[i].selected = options[i].defaultSelected;
+    }
+
     pageCount = 0;
     if (value === "api") {
       if (search !== "") {
-        const neatArray = [...gameSearched].filter((e) => typeof(e.id)==="number")
+        const neatArray = [...gameSearched].filter((e) => typeof (e.id) === "number")
         return dispatch(getItemSearch(neatArray))
-      }else{
-        const neatArray = [...allGames].filter((e) => typeof(e.id)==="number")
+      } else {
+        const neatArray = [...allGames].filter((e) => typeof (e.id) === "number")
         setItems(neatArray.slice(0, 0 + ITEMS_PER_PAGE));
         //setGames(neatArray);
         satDataFromApi(neatArray)
@@ -276,10 +295,10 @@ const Home = () => {
     }
     if (value === "db") {
       if (search !== "") {
-        const neatArray = [...gameSearched].filter((e) => typeof(e.id)==="string")
+        const neatArray = [...gameSearched].filter((e) => typeof (e.id) === "string")
         return dispatch(getItemSearch(neatArray))
-      }else{
-        const neatArray = [...allGames].filter((e) => typeof(e.id)==="string")
+      } else {
+        const neatArray = [...allGames].filter((e) => typeof (e.id) === "string")
         setItems(neatArray.slice(0, 0 + ITEMS_PER_PAGE));
         //setGames(neatArray);
         satDataFromApi(neatArray)
@@ -293,13 +312,13 @@ const Home = () => {
     dispatch(getAllGames());
     setFilteredGenres([]);
     var options = document.getElementById("selectGenre")
-      for (var i = 0, l = options.length; i < l; i++) {
-        options[i].selected = options[i].defaultSelected;
-      }
-    if(search===""){
+    for (var i = 0, l = options.length; i < l; i++) {
+      options[i].selected = options[i].defaultSelected;
+    }
+    if (search === "") {
       setItems(allGames?.slice(currentPage, currentPage + ITEMS_PER_PAGE))
       satDataFromApi(allGames)
-    }else{
+    } else {
       dispatch(getAllGames());
       dispatch(getItemSearch(gameSearched?.slice(currentPage, currentPage + ITEMS_PER_PAGE)))
     }
@@ -307,7 +326,7 @@ const Home = () => {
 
 
   return (
-    <div className={`${style.homeAll}`}>
+    <div id='top' className={`${style.homeAll}`}>
       <div className={`${style.homeVideo}`}>
         <video loop muted autoPlay="autoplay" src={`${headerVideo}`} poster="https://images4.alphacoders.com/903/thumb-1920-903637.jpg" />
       </div>
@@ -323,37 +342,42 @@ const Home = () => {
             <li><button onClick={(e) => apiDataBase(e)} value={"api"}>Api</button></li>
             <li><button onClick={(e) => apiDataBase(e)} value={"db"}>Data Base</button></li>
           </div>
-          <li><select id='selectGenre' name="genres" onChange={e => genreSelect(e)}>
-          <option value="" selected disabled hidden>Genres filter</option>
+          <li><select defaultValue={"Genres filter"} id='selectGenre' name="genres" onChange={e => genreSelect(e)}>
+            <option value="" disabled hidden>Genres filter</option>
             <option value="null">All</option>
             {allGenres?.map((genre) => {
-              return <option key={genre.id}>{genre.name}</option>
+              return <option value={genre.name} key={genre.id}>{genre.name}</option>
             })}
           </select></li>
         </ul>
       </div>
       <div className={`${style.genresContainer}`}>
-          <ul>
+        <ul>
           {filteredGenres?.map((f) => {
-              return (<li>
-                  <div className={`${style.eachGenre}`}><span>{f}</span></div>
-              </li>)
-            })}
-          </ul>
-        </div>
+            return (<li key={f}>
+              <div className={`${style.eachGenre}`}><span>{f}</span></div>
+            </li>)
+          })}
+        </ul>
+      </div>
       <div className={`${style.refreshCont}`}>
-      <button className={`${style.refreshButton}`} onClick={(e) => refreshHandler(e)} value={"db"}><HiRefresh/></button>
+        <button className={`${style.refreshButton}`} onClick={(e) => refreshHandler(e)} value={"db"}><HiRefresh /></button>
       </div>
       <div className={`${style.homeContainer}`}>
         <ul>
           {
-            loading=== true? 
-            <div className={`${style.loading}`}><Loading></Loading></div>: 
-            search === "" ? 
-            <Cards allGames={filteredGames()} pageCount={pageCount} currentPage={currentPage} /> : 
-            <Cards allGames={filteredGames()} pageCount={1} currentPage={currentPage} />
+            loading === true ?
+              <div className={`${style.loading}`}><Loading></Loading></div> :
+              search === "" ?
+                <Cards allGames={filteredGames()} pageCount={pageCount} currentPage={currentPage} /> :
+                <Cards allGames={filteredGames()} pageCount={1} currentPage={currentPage} />
           }
         </ul>
+      </div>
+      <div id='goTopCont' className={style.goTopCont}>
+        <div className={style.goTopBut} onClick={goUp}>
+          <i href='#top'><BsArrowUpShort></BsArrowUpShort></i>
+        </div>
       </div>
     </div>
   )

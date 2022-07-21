@@ -30,6 +30,7 @@ export class Nav extends Component {
     }
 
     async refreshHandler (e){
+        document.getElementById("inputSearch").value = "";
         this.props.putSearchedGames();
         this.props.getAllGames();
     }

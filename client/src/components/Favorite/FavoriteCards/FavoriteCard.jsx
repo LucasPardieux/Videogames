@@ -149,6 +149,7 @@ const FavoriteCard = ({ props }) => {
     }
 
     return (
+        <div>
         <Link to={`/details/${props.id}`}>
             <div className={`${style.contExt}`}>
                 <div className={`${style.contenedor}`}>
@@ -163,14 +164,15 @@ const FavoriteCard = ({ props }) => {
                             <div className={`${style.starsSpan}`}>
                                 <span>{ratingStars(props.rating)}</span>
                             </div>
-                            <span className={`${style.iconFavorite}`} onClick={(e) => { addFavorite(props) }}>
-                                {showFavorite(props)}
-                            </span>
                         </div>
                     </div>
                 </div>
             </div>
-        </Link>
+            </Link>
+            <span className={`${style.iconFavorite}`} onClick={(e) => { addFavorite(props) }}>
+                {showFavorite(props)}
+            </span>
+        </div>
     )
 }
 
