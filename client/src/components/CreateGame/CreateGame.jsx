@@ -25,9 +25,9 @@ export class CreateGame extends Component {
                 image: "",
             },
             errors: {
-                name: "",
-                released: "",
-                rating: "",
+                name: "name is required",
+                released: "released date is required",
+                rating: "rating is required",
                 description: "",
                 image: "",
             },
@@ -137,25 +137,29 @@ export class CreateGame extends Component {
             })
             return;
         }
-
+        
 
         if (name === 'platforms') {
+            
             this.setState((state) => {
-                return { [name]: [...state.platforms, value] }
+                return { [name]: [...state.platforms, value],
+                errors }
             });
             return;
         }
 
         switch (name) {
             case 'name':
-                let namePattern = /^[A-Za-z0-9 _-]*$/
-                errors.name = namePattern.test(value) ? '' : 'The title must have at least 2 characters and not contain any special characters or numbers'
+                //let start = value.startsWhit(" ")
+                let namePattern = /^(?!\s*$)[A-Za-z0-9 _-]*$/
+                errors.name = namePattern.test(value)  ? '' : 'The title cannot start with an empty space and must not contain any special characters or numbers'
                 break;
             case 'released':
                 let fechas = value
+                let year = fechas.split("-")
                 let date = new Date()
                 let dateNow = (date.getFullYear() + "-"+0+ (date.getMonth()+1)+ "-" +date.getDate())
-                errors.released = dateNow<fechas? 'The date entered is invalid.' : '';
+                errors.released = dateNow<fechas? 'The date entered is invalid.' :year[0]>date.getFullYear()? 'The date entered is invalid.':year[0]<1500?'Date must be later than 01-01-1500': '';
                 break;
             case 'rating':
                 errors.rating = (value < 0 || value > 5) || this.state.rating.length>=5 ? 'The rating must be in a range between 0 and 5 and you must enter less than 5 characters' : '';
@@ -165,7 +169,7 @@ export class CreateGame extends Component {
                 errors.image = urlPattern.test(value) ? '' : 'The image url is not valid';
                 break;
             case 'description':
-                let descriptionPattern = /^[A-Za-z0-9,. _-]*$/;
+                let descriptionPattern = /^(?!\s*$)[A-Za-z0-9ñ,. _-]*$/;
                 errors.description = descriptionPattern.test(value) ? '' : 'The description must be between 5 and 500 characters and contain no special characters or numbers.';
                 break;
             default:
@@ -193,23 +197,30 @@ export class CreateGame extends Component {
             })
             genres=idGenres.filter((g)=>g!==undefined);
 
-            const newGame = {
-                name, description, released, rating, image, genres, platforms
+            if(platforms.length>0){
+                const newGame = {
+                    name, description, released, rating, image, genres, platforms
+                }
+                postGame(newGame)
+                .then(()=> {
+                    let form = document.getElementById("form")
+                    form.reset();
+                    this.props.getAllGames();
+                    window.alert("successfully created Game")
+                })
+            }else{
+                alert("Platforms is required.")
+                return;
             }
-            console.log(newGame);
-            postGame(newGame)
-            .then(()=> {
-                let form = document.getElementById("form")
-                form.reset();
-                this.props.getAllGames();
-                window.alert("successfully created Game")
-            })
+
+            
     }
 
 
     render() {
         return (
             <div>
+                {console.log(this.state.platforms)}
                 <div className={`${style.contenedor}`}>
                     <h1>Create your own Game</h1>
                     <div className={`${style.form}`}>
@@ -221,7 +232,7 @@ export class CreateGame extends Component {
                                 <h5>Released date:*</h5>
                                 <input name="released" type="date" onChange={(e) => {this.handleChange(e)}} />
                                 {!this.state.errors.released ? null : <div className={`${style.error}`}>{this.state.errors.released}</div>}
-                                <h5>Rating:</h5>
+                                <h5>Rating*:</h5>
                                 <input name="rating" type="number" step={0.01} maxLength={4} onChange={(e) => { this.fillPreview(e); this.handleChange(e) }} />
                                 {!this.state.errors.rating ? null : <div className={`${style.error}`}>{this.state.errors.rating}</div>}
                                 <h5>image URL:</h5>
@@ -231,7 +242,7 @@ export class CreateGame extends Component {
                                 <textarea className={`${style.stepByStep}`} onChange={(e) => {this.handleChange(e)}} id='buttonStep' name="description" type="text" minLength={5} maxLength={500} />
                                 {!this.state.errors.description ? null : <div className={`${style.error}`}>{this.state.errors.description}</div>}
                             </div>
-                            <h5>Genres:*</h5>
+                            <h5>Genres:</h5>
                             <div className={`${style.checkCont}`}>
                                 <ul className={`${style.UndordenedList}`}>
                                     {this.props.allGenres && this.props.allGenres?.map((genre, index) => {
@@ -254,7 +265,9 @@ export class CreateGame extends Component {
                                         )
                                     })}
                                 </ul>
+                                
                             </div>
+                                {this.state.platforms.length>0 ? <div/> : <div className={`${style.error}`}>Platform is required!</div>}
                             <input className={`${style.button}`} disabled={this.state.disabled} name="button" type="submit" value="Create Game" onClick={(e) => this.handleSubmit(e)} />
                         </form>
                     </div>
